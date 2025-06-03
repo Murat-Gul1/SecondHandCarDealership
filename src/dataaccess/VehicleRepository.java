@@ -1,4 +1,4 @@
 package dataaccess;
 
-public class VehicleRepository {
+public interface VehicleRepository {
 }

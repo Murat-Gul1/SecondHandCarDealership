@@ -1,4 +1,4 @@
 package business;
 
-public class VehicleService {
+public interface VehicleService {
 }
