@@ -32,9 +32,9 @@ Data is stored in a plain text file (`car.txt`) in CSV format. Each record repre
 
 - **diagrams/**  
   Contains exported UML diagrams:
-    - `UseCaseDiagram.png`
-    - `PackageDiagram.png`
-    - `ClassDiagram.png`
+    - `UseCaseDiagram.jpg`
+    - `PackageDiagram.jpg`
+    - `ClassDiagram.jpg`
 
 ## 3. Requirements
 
