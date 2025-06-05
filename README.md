@@ -11,10 +11,27 @@ Data is stored in a plain text file (`car.txt`) in CSV format. Each record repre
 - **status** can be either `in_stock` or `sold`.
 
 ## 2. Project Structure
-![Project Structure](./diagrams/folder_structure.jpg)
-
-
-
+```
+SecondHandCarDealership/
+├── .gitignore
+├── README.md
+├── car.txt
+├── diagrams/
+│   ├── UseCaseDiagram.png
+│   ├── PackageDiagram.png
+│   └── ClassDiagram.png
+└── src/
+    ├── model/
+    │   └── Vehicle.java
+    ├── dataaccess/
+    │   ├── VehicleRepository.java
+    │   └── TxtVehicleRepository.java
+    ├── business/
+    │   ├── VehicleService.java
+    │   └── VehicleServiceImpl.java
+    └── presentation/
+        └── ConsoleApp.java
+```
 
 - **model**
     - `Vehicle.java`: Represents a vehicle entity (make, model, year, mileage, price, chassis number, status).
