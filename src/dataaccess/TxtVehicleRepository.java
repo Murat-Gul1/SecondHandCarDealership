@@ -108,6 +108,81 @@ public class TxtVehicleRepository implements VehicleRepository {
     }
 
     /**
+     * Updates an existing vehicle in the file based on the chassis number.
+     * <p>
+     * Reads the file line by line and rewrites each line to a temporary file.
+     * If a line matches the given vehicle's chassis number, it is replaced
+     * with the updated vehicle data.
+     * </p>
+     * <p>
+     * After processing, the original file is replaced by the updated temporary
+     * file.
+     * If no matching chassis number is found, an exception is thrown.
+     * </p>
+     *
+     * @param vehicle the {@code Vehicle} object containing updated values
+     * @throws IllegalArgumentException if the vehicle or chassis number is
+     *                                  null/blank, or if no matching vehicle is
+     *                                  found
+     * @throws RuntimeException         if an I/O error occurs during file
+     *                                  processing
+     */
+
+    @Override
+    public void update(Vehicle vehicle) {
+        if (vehicle == null || vehicle.getChassisNumber() == null || vehicle.getChassisNumber().isBlank()) {
+            throw new IllegalArgumentException("Vehicle or chassis number cannot be null or empty");
+        }
+
+        File inputFile = new File(FILE_PATH);
+        File tempFile = new File("temp_" + FILE_PATH);
+        boolean update = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length != 7)
+                    continue;
+
+                String existingChassisNumber = parts[5].trim();
+                if (existingChassisNumber.equals(vehicle.getChassisNumber())) {
+                    String newLine = String.join(",",
+                            vehicle.getMake(),
+                            vehicle.getModel(),
+                            String.valueOf(vehicle.getYear()),
+                            String.valueOf(vehicle.getMileage()),
+                            String.valueOf(vehicle.getPrice()),
+                            vehicle.getChassisNumber(),
+                            vehicle.getStatus());
+                    writer.write(newLine);
+                    update = true;
+                } else {
+                    writer.write(line);
+                }
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error updating file: " + FILE_PATH, e);
+        }
+        if (!inputFile.delete()) {
+            tempFile.delete();
+            throw new RuntimeException("Failed to delete original file: " + inputFile.getAbsolutePath());
+        }
+
+        if (!tempFile.renameTo(inputFile)) {
+            throw new RuntimeException("Failed to rename temp file to original: " + tempFile.getAbsolutePath());
+        }
+
+        if (!update) {
+            throw new IllegalArgumentException(
+                    "Vehicle with chassis number " + vehicle.getChassisNumber() + " not found");
+        }
+
+    }
+
+    /**
      * Deletes the {@code Vehicle} record with the specified chassis number from
      * {@code car.txt}.
      * <p>
